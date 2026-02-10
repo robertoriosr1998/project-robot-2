@@ -1,14 +1,35 @@
+"""
+Data extraction using GPT4All local LLM.
+
+Model location: ./models/Meta-Llama-3-8B-Instruct.Q4_0.gguf
+"""
 import json
 import re
+from pathlib import Path
 from gpt4all import GPT4All
 
 _model = None
 
 def get_model(model_name: str = "Meta-Llama-3-8B-Instruct.Q4_0.gguf") -> GPT4All:
-    """Get or create GPT4All model instance."""
+    """Get or create GPT4All model instance.
+    
+    Loads model from ./models/ folder in project directory.
+    """
     global _model
     if _model is None:
-        _model = GPT4All(model_name)
+        local_model_path = Path(__file__).parent / "models" / model_name
+        
+        if not local_model_path.exists():
+            raise FileNotFoundError(
+                f"Model not found: {local_model_path}\n"
+                f"Expected: {model_name} in ./models/ folder\n"
+                f"Current config.py setting: LLM_MODEL = '{model_name}'"
+            )
+        
+        print(f"  Loading LLM model: {model_name}")
+        _model = GPT4All(model_name, model_path=str(local_model_path.parent), allow_download=False)
+        print(f"  Model loaded successfully!")
+    
     return _model
 
 def extract_structured_data(text: str, extraction_prompt: str, model_name: str = None) -> dict:
