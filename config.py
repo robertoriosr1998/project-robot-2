@@ -5,7 +5,7 @@ OCR_LANGUAGES = ['en']
 PDF_DPI = 300
 
 # GPT4ALL model (will download on first run if not present)
-LLM_MODEL = "Meta-Llama-3-8B-Instruct.Q4_0.gguf"
+LLM_MODEL = "tinyllama-1.1b-chat-v1.0.Q4_0.gguf"
 
 # Extraction prompt - CUSTOMIZE THIS for your CN documents
 # Output maps to CN Database columns (3-14)

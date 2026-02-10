@@ -1,5 +1,8 @@
-# Model files (too large for GitHub)
-models/
+# Large model files (ignore the old 4GB+ model)
+models/Meta-Llama-3-8B-Instruct.Q4_0.gguf
+
+# Temporary PDF downloads
+downloads/
 
 # Python cache
 __pycache__/

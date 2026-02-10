@@ -2,36 +2,34 @@
 
 ## Current Setup
 
-**Model:** Meta-Llama-3-8B-Instruct.Q4_0.gguf  
-**Location:** `./models/Meta-Llama-3-8B-Instruct.Q4_0.gguf`  
-**GitHub Release:** https://github.com/robertoriosr1998/project-robot-2/releases/tag/model-v1.0
+**Model:** tinyllama-1.1b-chat-v1.0.Q4_0.gguf  
+**Location:** `./models/tinyllama-1.1b-chat-v1.0.Q4_0.gguf`  
+**Size:** ~700 MB (small enough to commit directly to GitHub)
 
 ---
 
 ## Download Model on New Machine
 
-If you need to download the model on another machine (e.g., at work):
+If you need to download the model on another machine:
 
-### Option 1: Automatic Download & Merge (Recommended)
+### Option 1: Download from Hugging Face
 
 ```bash
-python download_and_merge_model.py
+# Create models directory if it doesn't exist
+mkdir -p models
+
+# Download directly from Hugging Face
+curl -L "https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF/resolve/main/tinyllama-1.1b-chat-v1.0.Q4_0.gguf" -o models/tinyllama-1.1b-chat-v1.0.Q4_0.gguf
 ```
 
-The script will:
-- Prompt for GitHub repo, release tag, and model name (with defaults)
-- Download all chunks from GitHub
-- Merge them automatically
-- Save to `./models/` folder
+### Option 2: Clone from Your Repository
 
-### Option 2: Manual Download & Merge
-
-1. Download chunks from: https://github.com/robertoriosr1998/project-robot-2/releases/tag/model-v1.0
-2. Save all `.part` files to a folder
-3. Run merge script:
+If the model is committed to your GitHub repository, just clone/pull:
 
 ```bash
-python merge_model_chunks.py <folder_with_parts>
+git clone https://github.com/robertoriosr1998/project-robot-2.git
+cd project-robot-2
+# Model should be in ./models/ folder
 ```
 
 ---
@@ -62,7 +60,7 @@ The script automatically loads the model from the local folder.
 Model is configured in `config.py`:
 
 ```python
-LLM_MODEL = "Meta-Llama-3-8B-Instruct.Q4_0.gguf"
+LLM_MODEL = "tinyllama-1.1b-chat-v1.0.Q4_0.gguf"
 ```
 
 Change this line if using a different model.
@@ -71,24 +69,26 @@ Change this line if using a different model.
 
 ## Model Storage
 
-- **Local:** `./models/Meta-Llama-3-8B-Instruct.Q4_0.gguf` (4.3 GB)
-- **GitHub:** Split into 3 chunks (~1.5 GB each) in release
-- **Chunks:** `.part01`, `.part02`, `.part03`
+- **Local:** `./models/tinyllama-1.1b-chat-v1.0.Q4_0.gguf` (~700 MB)
+- **GitHub:** Small enough to commit directly (no need for releases/chunks)
+- **Speed:** ~7x faster than Llama-3-8B on CPU-only systems
 
 ---
 
 ## Troubleshooting
 
 **"Model not found" error:**
-- Run `download_and_merge_model.py` to download from GitHub
-- Or check that model exists in `./models/` folder
+- Download from Hugging Face: https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF
+- Save to `./models/` folder
+- Or pull from your GitHub repo if already committed
 
-**Download fails:**
-- Check internet connection
-- Verify GitHub release exists
-- Try manual download from browser
+**Model runs too slow:**
+- TinyLlama is optimized for CPU, but if still slow:
+  - Close other applications
+  - Check CPU usage in Task Manager
+  - Consider upgrading to a system with more RAM
 
-**Merge fails:**
-- Re-download the chunks
-- Check all `.part` files downloaded completely
-- Verify disk space (need ~8 GB free during merge)
+**Extraction quality issues:**
+- TinyLlama is smaller and may miss some fields
+- Consider testing with your PDFs first
+- If quality is insufficient, upgrade to Phi-3-mini (2.3 GB) or Llama-3.2-3B (1.9 GB)
